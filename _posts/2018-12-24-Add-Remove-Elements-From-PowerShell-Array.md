@@ -2,7 +2,7 @@
 title: "How to Easily Add or Remove Items in a PowerShell Array (Step-by-Step Guide)"
 excerpt: Learn how to add and remove elements from a PowerShell array using list objects."
 categories:
-  - PowerShell
+  - PowerShell-howto
 tags:
   - PowerShell
   - Arrays
