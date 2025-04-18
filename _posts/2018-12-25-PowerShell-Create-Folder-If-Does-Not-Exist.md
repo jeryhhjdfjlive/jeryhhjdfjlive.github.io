@@ -1,41 +1,43 @@
 ---
-title: "PowerShell Create Folder if it does not exist"
-excerpt: "Learn how PowerShell can check if a folder exists and automatically create it if not."
+
+title: "PowerShell Create a Directory If It’s Missing"  
+excerpt: "Discover how PowerShell can verify a folder’s existence and create it automatically if missing."  
 categories:
   - PowerShell
   - HowTo
+  - powershell-howto
 tags:
   - PowerShell
   - PowerShell Basics
   - HowTo
 
-toc: true
-comments: true
+toc: true  
+comments: true  
 ---
 
-This will be a short post regarding a question I get or see asked rather frequently and that is worth writing about.
+Today’s post will be a quick guide about a commonly asked question that's definitely worth addressing.
 
-## PowerShell Check if folder exists
+## How to Verify a Folder Exists Using PowerShell
 
-Sometimes when interacting with filesystem, for example when writing a log file to disk, it is important making sure destination folder we are going to write files to really exists to avoid PowerShell throwing an exception or, worse, losing data.
+When working with file systems — like saving a log file — it's crucial to ensure the target directory already exists. If not, PowerShell could throw errors or, even worse, cause data loss.
 
-PowerShell and PowerShell Core have a native cmdlet to check existence of a given path
+Thankfully, both PowerShell and PowerShell Core include a native cmdlet that makes checking a path simple:
 
 ```powershell
 Test-Path -Path 'C:\Temp\'
 ```
 
-The *Test-Path* cmdlet will take a path as argument and return a *True* (boolean value) if the given path exists. This can easily be used in scripts to check if a given folder exists and create if not like in the following example
+The *Test-Path* cmdlet takes a path input and returns *True* if it finds it. You can use this easily in your scripts to validate a folder's presence and create one if missing:
 
 ```powershell
-# Define where to store logs
+# Set up log storage location
 [string]$logPath = 'C:\MyLogPath\'
 
-# Create folder if does not exist
+# Create directory if missing
 if (!(Test-Path -Path $logPath))
 {
     $paramNewItem = @{
-        Path      = $logPAth
+        Path      = $logPath
         ItemType  = 'Directory'
         Force     = $true
     }
@@ -44,25 +46,28 @@ if (!(Test-Path -Path $logPath))
 }
 ```
 
-This is something I do so often that I have put it in one of my script templates so not to worry about it every time I write code for a new script.
+I rely on this pattern so often that I’ve baked it into my script templates — saving time and avoiding repeated coding.
 
-## Check if folder exists the .Net Way
+## How to Check Folder Existence via .NET
 
-The *Test-Path* cmdlet is calling a built-in .Net function under the hood, in case you want to impress your friends the above can be rewritten like this
+Underneath, *Test-Path* relies on built-in .NET methods. If you want to flex your .NET skills, you can swap it out with something like this:
 
 ```powershell
-# Define where to store logs
+# Set up log storage location
 [string]$logPath = 'C:\MyLogPath\'
 
-# Create folder if does not exist
-if (!([System.IO.Directory]::Exists($logPath))
+# Create directory if missing
+if (!([System.IO.Directory]::Exists($logPath)))
 {
-    [system.io.directory]::CreateDirectory($logPath)
+    [System.IO.Directory]::CreateDirectory($logPath)
 }
 ```
 
-## Closing Notes
+## Final Thoughts
 
-The two methods to check if a folder exists I have described in the article are equivalent. Second approach is slightly more performant but risk to make your code less readable.
+Both approaches — using *Test-Path* or tapping directly into .NET — achieve the same goal.  
+While the .NET method offers a slight performance boost, it could make your code less intuitive for others.
 
-Given the negligible performance gain I tend to prefer the first method as makes code much clear for somebody who's taking over or modifying my work.
+Personally, I favor the first method. It keeps the script clean and easy for future collaborators (or even my future self!) to quickly understand and update.
+
+---
