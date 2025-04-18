@@ -1,43 +1,42 @@
 ---
-title: "PowerShell delete old files"
-excerpt: "Learn how you can use PowerShell to automatically delete files and folders older than a number of days"
+
+title: "How to Automatically Delete Old Files and Folders with PowerShell (Step-by-Step Guide)"  
+excerpt: "Discover how to create PowerShell scripts that automatically find and delete files and folders older than a specific number of days. Improve storage management and automate file cleanup with this easy tutorial."  
 categories:
   - PowerShell
-  - HowTo
-  - Scripts
 tags:
   - PowerShell
-  - PowerShell Basics
-  - HowTo
-  - Delete Files
-  - PowerShell Core
+  - Automation
 ---
 
-## The requirement
+## Understanding the Need for File Cleanup Automation
 
-When dealing with automation it is essential to log each operation taken by scripts so that it is possible to easily find what went wrong and when with a specific script. The downside of maintaining log files is that they take up space on the disk and usually you don't want to keep files around forever.
+In the world of automation scripting, it’s critical to log every action performed. This helps in quickly diagnosing issues and tracking script execution timelines.  
+However, storing log files indefinitely can consume valuable disk space — and it's rarely necessary to keep them forever.
 
-PowerShell allows us to easily delete files older than a specific number of days, in this article I will describe how the process works.
+Luckily, PowerShell provides a straightforward way to **automatically delete files** that are older than a set number of days.  
+In this tutorial, I’ll walk you through how to automate old file removal using simple PowerShell scripts.
 
-## The goal
+## Defining the Cleanup Goal
 
-Our goal is to find all files under a specific path that have been created more than **90 days** ago. In the article I will use a sample folder with some old files in it to illustrate how the process works.
+Our objective is to identify and delete files from a specified directory that were created over **90 days** ago.  
+I'll demonstrate this process using a sample folder filled with outdated files.
 
-Before starting to code our solution there are couple of important questions that we need to answer:
+Before we dive into writing the script, here are a few critical decisions to make:
 
-- Do we want to recurse in subfolders?
-- Which files shall we remove from folder?
-- What is the retention period?
+- Should we search within subfolders as well?
+- What file types should be targeted for deletion?
+- How long should files be retained before removal?
 
-Here's a scheme of what I will be using in the article:
+Here’s the configuration setup we'll use:
 
-| Recurse in subfolders        | File Extension           | Retention in Days  |
-| ------------- |:-------------:| -----:|
-| Yes      | .log | 90 days |
+| Include Subfolders | File Extension | Retention Period |
+| ------------------- |:--------------:| ----------------:|
+| Yes                 | .log            | 90 days          |
 
-## Get Relevant files
+## How to Find Files for Deletion
 
-Once we have defined requirements it's time to start coding our solution, the first step is getting required variables in place:
+Once the parameters are clear, let’s start coding. The first step is defining the essential variables:
 
 ```powershell
 [string]$filePath = 'C:\TestCleanup\'
@@ -46,77 +45,62 @@ Once we have defined requirements it's time to start coding our solution, the fi
 [datetime]$ageTimeSpan = (Get-Date).AddDays(-$fileAge)
 ```
 
-The above will serve as our configuration to instruct the script what to remove. The *$ageTimeSpan* variable is taking our defined file age, 90 days, and subtracting it to the current date so to calculate files' age.
+These variables guide the script on what to look for.  
+The *$ageTimeSpan* calculates the threshold date by subtracting 90 days from the current date.
 
-To retrieve a list of relevant files we can use the *Get-ChildItem* cmdlet with desired filters like this:
+Now, retrieve a list of files that meet the age and extension criteria using *Get-ChildItem*:
 
 ```powershell
-# Get all matching files
+# Collect eligible files
 [array]$filesToPurge = Get-ChildItem -Path $filePath -Filter $fileExtension -File |
         Where-Object { $_.LastWriteTime -lt $ageTimeSpan }
 ```
 
-The above will get all files with an extension of *.log* that have been written more than *90 days* ago (less than current date minus 90 days).
+This command filters for all *.log* files that are older than the specified 90-day threshold.
 
-## Process Files to remove
+## How to Delete Old Files with PowerShell
 
-Once we have the list of files all we have to do is cycling through them and remove stale ones which is easily accomplished like:
+After gathering the files, loop through them and delete each outdated file:
 
 ```powershell
 foreach ($file in $filesToPurge)
 {
-    # Get file full path
+    # Capture full file path
     [string]$fileName = $file.FullName
 
-    # Remove file without confirmation
+    # Delete the file without prompting
     Remove-Item $fileName -Confirm:$false
 }
 ```
 
-The above code has an issue though. Maybe no file in defined folder is older that the defined time span period while this would not generate any error it is a good idea to add a small clause to our code like this:
+However, it’s good practice to check if any files actually exist before trying to delete them. Let’s improve the code with a simple conditional check:
 
 ```powershell
 if ($filesToPurge.Count -gt 0)
 {
     foreach ($file in $filesToPurge)
     {
-        # Get file full path
+        # Capture full file path
         [string]$fileName = $file.FullName
 
-        # Remove file without confirmation
+        # Delete the file without prompting
         Remove-Item $fileName -Confirm:$false
     }
 }
 else
 {
-    # Replace with proper logging
-    Write-Host -Object 'No files to purge!'
+    # Optional: Add proper logging mechanism
+    Write-Host -Object 'No outdated files found to delete!'
 }
 ```
 
-You can find the complete code in the following [gist](https://gist.github.com/PsCustomObject/d73c19c85296b6436d9de33ba25197cc)
+## Expanding the File Cleanup Script
 
-## Further Script Development
+The PowerShell script shared above is a minimal example — you can expand it based on your specific needs, such as:
 
-The code in this article is just a minimum working example that can be expanded upon to accommodate needs like:
+- Scanning multiple directories
+- Excluding specific subfolders
+- Implementing centralized configuration files for flexible management
 
-- Scanning multiple paths
-- Ignore or skip specific folders or subfolders
-- Support central configuration
-
-There are probably more features that could make the script even more useful and I would love to hear what you think could be useful.
-
-I am developing something to accommodate the above requirements as it is something I do rather frequently, it is not quite ready yet but I will share as soon code has been written and tested.
-
-## Update January 5 2019
-
-I have released a complete solution to perform automatic cleanup of files in folders called **Remove-OldFiles.ps1** it does all that I described in the post in addition to support:
-
-- Central configuration
-- Exception notification
-- Custom retention policies
-- Ignored path(s)
-
-You can find source code either [here](https://github.com/PsCustomObject/Remove-Old-Files) or over [Technet Galleries](https://gallery.technet.microsoft.com/Cleanup-Old-Files-bde3af13)
-
-Hope you can find the script useful and of course if you have any feature you'd like to see implemented don't hesitate to open an issue in Git!
+There are plenty of additional features you could incorporate to make the script even more powerful.  
+I'm currently developing an enhanced version of this script and will share it as soon as it’s tested and ready.
