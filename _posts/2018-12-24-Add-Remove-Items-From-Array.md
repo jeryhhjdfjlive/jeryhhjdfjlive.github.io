@@ -1,6 +1,6 @@
 ---
-title: "PowerShell add or remove elements from an Array"
-excerpt: "Learn how to create you can add and remove elements from a PowerShell array through the use of list objects."
+title: "How to Easily Add or Remove Items in a PowerShell Array (Step-by-Step Guide)"
+excerpt: Learn how to add and remove elements from a PowerShell array using list objects."
 categories:
   - PowerShell
 tags:
@@ -12,134 +12,124 @@ tags:
 toc: true
 ---
 
-This is a question I get rather frequently so I thought to write an article about it. As the title implies I will show how you can add or remove elements to a PowerShell array once it has been created.
+If you've ever wondered how to modify a PowerShell array after you’ve set it up, you’re not alone! This is a common question — and today, I’m breaking it down into super simple steps.
 
-## PowerShell Arrays
+## What Is an Array in PowerShell?
 
-Let's start with the definition of an array as it comes from PowerShell documentation:
+Straight from the PowerShell docs:
 
-> An array is a data structure that is designed to store a collection of items. The items can be the same type or different types.
-> Beginning in Windows PowerShell 3.0, a collection of zero or one object has some properties of arrays.
+> An array is a special structure designed to store groups of items — they can be all alike or completely different.  
+> Starting with PowerShell 3.0, even a single object behaves like an array sometimes!
 
-Creating an array in PowerShell is really simple and most probably you already did when, for example, getting a list of users from Active Directory
+Creating one? It's easier than you think. Here’s an example you’ve probably already used:
 
 ```powershell
 $adUsers = Get-AdUser -Filter '*' -Server $adDomainController
 ```
 
-The above will return an array of AD objects containing all users matching the used filter.
+This command pulls a full list of Active Directory users into an array.
 
-Of course you can initialise an empty array with the following syntax
+Want to create an empty array? Here’s how:
 
 ```powershell
 $myArray = @()
 
-# Specify object type
+# Or, declare the type explicitly
 [array]$myArray = @()
 ```
 
-The above will initialise an empty array that we can, for example, fill with an AD query or adding static elements like this
+You can also preload it with values:
 
 ```powershell
 $myArray = (1,2,3,4,5)
 ```
 
-The above will add elements 1 to 5 to *myArray* object instantiating a new object with length of **5**
+Boom! You’ve got an array packed with five numbers.
 
-## PowerShell Add Elements to an Array
+## Adding Items to an Existing PowerShell Array
 
-We have see how to create and assign values to an array but what if we want to add a sixth element to *myArray*? If you try the following
+Now, what if you want to sneak a 6 into that array? If you try this:
 
 ```powershell
 $myArray.Add(6)
 ```
 
-It will fail with the following exception
+You’ll hit an error saying the array size is fixed — it can’t stretch!
 
-```powershell
-Exception calling "Add" with "1" argument(s): "Collection was of a fixed size."
-At line:1 char:1
-+ $myArray.Add(6)
-+ ~~~~~~~~~~~~~~~
-+ CategoryInfo          : NotSpecified: (:) [], MethodInvocationException
-+ FullyQualifiedErrorId : NotSupportedException
-```
-
-The above exception is thrown as a PowerShell array is a collection of fixed size and error is telling just that, it cannot be extended.
-
-One common solution is to use the **+=** operator like for example
+Instead, use the trusty **+=** operator:
 
 ```powershell
 $myArray += 6
 
-# Print array's length
+# Verify it
 $myArray.length
 
 6
 ```
 
-When using the *+=* operator what happens under the hood is
+**Behind the scenes:**  
+PowerShell builds a brand-new array with your new addition and swaps it in place of the old one — all invisibly.
 
-- PowerShell creates a new array with the same elements as the old one **plus** the new item
-- PowerShell will overwrite existing array with the new content
+## Want More Flexibility? Meet ArrayList
 
-All of this is transparent to the user so you won't see any difference. 
-
-## Add Elements to an Array - Enter ArrayList
-
-If you want to avoid all the copying/moving data you can instantiate *myArray* as a **[ArrayList](https://docs.microsoft.com/en-us/dotnet/api/system.collections.arraylist?view=netframework-4.7.2)** which is dynamic and will allow you to add remove elements on the fly
+If you need to dynamically add or remove elements without the "fixed size" drama, you’ll love **ArrayList**:
 
 ```powershell
-# Initialize object
+# Create an ArrayList
 $myArrayList = New-Object System.Collections.ArrayList($null)
 
-# Add elements to list
+# Add items easily
 [void]($myArrayList.Add(1))
 [void]($myArrayList.Add(2))
 
-# Print array length
+# Check the count
 2
 ```
 
-Similarly you can remove elements from an ArrayList like this
+Need to delete something?
 
 ```powershell
-# Will corresponding item by index
+# Remove item by index
 $myArrayList.RemoveAt(1)
 ```
 
-**Note:** Remove method will accept element's value so *1* in the above example refers to the value not the item's index.
+**Pro Tip:**  
+Use `[void]` when adding items to keep your console clean from unwanted outputs.
 
->Cast to [void] to suppress *Add* method printing new array's length
+### Faster Way to Create ArrayList
 
-### Create Array List the alternate way
-
-The above example will call the *New-Object* method to instantiate a new *ArrayList* but this is relatively expensive in terms of computing resources so the above can be rewritten as
+Skip the slightly slower *New-Object* method! Instead:
 
 ```powershell
 [System.Collections.ArrayList]$myArray = @()
 ```
 
-In addition of being shorter it has the added benefit of avoiding the negative performance hit of *New-Object* and optimizing code is always a good idea especially when dealing with larger scripts.
+This shortcut saves resources and speeds up your scripts — a huge win for bigger projects!
 
-As an alternative you can cast PowerShell Array to *ArrayList*
+Or, simply cast a regular array:
 
 ```powershell
 $myArray = [System.Collections.ArrayList]@()
 ```
 
-## Closing Notes
+## Wrapping Up
 
-When writing code, despite not being required by PowerShell, I try to alway declare the object's type as that is helpful to know, at any given moment, Properties and Methods supported by the object so I alway write
+Here’s a personal best practice:  
+Even though PowerShell doesn’t *require* you to define types, I recommend it for better clarity — especially when your scripts stretch into hundreds of lines!
+
+Compare:
 
 ```powershell
 [string]$myString = 'Some Text'
 ```
 
-Rather than 
+to
 
 ```powershell
 $myString = 'Some Text'
 ```
 
-This is not required by PowerShell but I find it helps code's readability and simplifies working with an object declared 800/900 lines up in the code without having to jump back to variable's declaration.
+**Bottom line:**  
+Specifying types helps your future self (and anyone else) understand your scripts way faster!
+
+---
