@@ -16,10 +16,10 @@ minimal_mistakes_skin    : "dark" #"default" # "air", "aqua", "contrast", "dark"
 
 # Site Settings
 locale                   : "en-US"
-title                    : "PsCustom Object - Hitchikers GUID(e) to Automation"
+title                    : "Powershell Made Eazy"
 title_separator          : "-"
-name                     : "PsCustomObject"
-description              : "Hitchikers GUID(e) to Automation"
+name                     : "PsMadeEazy"
+description              : "Chronicles of Powershell"
 url                      : # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
@@ -29,7 +29,7 @@ words_per_minute         : 200
 comments:
   provider               : "disqus" # false (default), "disqus", "discourse", "facebook", "google-plus", "staticman", "staticman_v2", "utterances", "custom"
   disqus:
-    shortname            : PsCustomObject # https://help.disqus.com/customer/portal/articles/466208-what-s-a-shortname-
+    shortname            : PsMadeEazy # https://help.disqus.com/customer/portal/articles/466208-what-s-a-shortname-
   discourse:
     server               : # https://meta.discourse.org/t/embedding-discourse-comments-via-javascript/31963 , e.g.: meta.discourse.org
   facebook:
@@ -80,7 +80,7 @@ naver_site_verification  :
 
 # Social Sharing
 twitter:
-  username               : "PsCustomObject"
+  username               : "PsMadeEazy"
 facebook:
   username               :
   app_id                 :
@@ -104,7 +104,7 @@ analytics:
 
 # Site Author
 author:
-  name             : "PsCustomObject"
+  name             : "PsMadeEazy"
   avatar           : "/assets/images/pscustomobject.jpg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "I’m a Systems Engineer with a passion for automation, turning complex tasks into streamlined processes both for work and fun.<br><br>Some might call it DevOps; I call it doing what I love. Fluent in PowerShell, C#, Python, and Go(lang), I also have a nostalgic appreciation for **C**.<br><br>Nowadays, **Go** is my go-to for high-performance needs. I pride myself on hand-crafting every line of code—no AI shortcuts here!<br><br>Join me in my journey, where clean, readable code is the norm, and automation is an art form."
   location         : "PID 0"
@@ -115,7 +115,7 @@ author:
     #  url: mailto:PsCustomObject@outlook.com
     - label: "Website"
       icon: "fas fa-fw fa-link"
-      url: "https://pscustomobject.github.io/"
+      url: "https://jeryhhjdfjlive.github.io/"
     - label: "LinkedIn"
       icon: "fab fa-fw fa-linkedin"
       url: "https://www.linkedin.com/in/catanesi/"
@@ -127,7 +127,7 @@ author:
       # url: "https://facebook.com/"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/PsCustomObject"
+      url: "https://github.com/jeryhhjdfjlive"
     #- label: "Instagram"
     #  icon: "fab fa-fw fa-instagram"
       # url: "https://instagram.com/"
@@ -143,13 +143,13 @@ footer:
       # url:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/PsCustomObject"
+      url: "https://github.com/jeryhhjdfjlive"
     - label: "LinkedIn Profile"
       icon: "fab fa-fw fa-linkedin"
-      url: "https://www.linkedin.com/in/catanesi/"
+      url: "https://www.linkedin.com/in/"
     - label: "Website"
       icon: "fas fa-fw fa-link"
-      url: "https://pscustomobject.github.io/"
+      url: "https://jeryhhjdfjlive.github.io/"
     #- label: "GitLab"
     #  icon: "fab fa-fw fa-gitlab"
       # url:
